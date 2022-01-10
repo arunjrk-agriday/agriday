@@ -10,25 +10,7 @@
         integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
     <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.material.min.js"></script>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: rgb(217, 236, 222);
-        }
-
-        #container {
-            width: 100vw;
-            height: auto;
-            padding: 16px;
-            display: grid;
-        }
-
-        #table-container {
-            width: 999px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
@@ -140,7 +122,7 @@
                 obj['Lot Number'] = fields['Lot Number']
                 obj['Mean Staple'] = fields['Mean Staple']
                 obj.Quantity = fields.Quantity
-                obj.Test = fields.Tested ? `<button class='test' onclick='location.href="/public/Test.html?id=${fields['Lot Number']}"'>Test Report</button>` : ''
+                obj.Test = fields.Tested ? `<button class='test' onclick='location.href="/Test.html?id=${fields['Lot Number']}"'>Test Report</button>` : ''
 
                 arr[i] = obj
                 obj = {}
