@@ -79,12 +79,21 @@
                 data: data,
 
                 columns: [{
-                        data: "Lot Number", title: "Lot Number"},{
-                        data: "Gin", title: "Gin"},{
-                        data: "Quantity", title: "Quantity"},{
-                        data: "Mean Staple", title: "Mean Staple"},{
-                        data: "Test", title: "Test Report" }
-                ],
+                    data: "Lot Number",
+                    title: "Lot Number"
+                }, {
+                    data: "Gin",
+                    title: "Gin"
+                }, {
+                    data: "Quantity",
+                    title: "Quantity"
+                }, {
+                    data: "Mean Staple",
+                    title: "Mean Staple"
+                }, {
+                    data: "Test",
+                    title: "Test Report"
+                }],
                 autoWidth: false,
                 columnDefs: [{
                     targets: ['_all'],
@@ -113,16 +122,18 @@
             let obj = {};
             let fields = {}
             let records = data.data.records
-    
+
             for (var i = 0; i < records.length; i++) {
-                
+
                 fields = records[i].fields
 
                 obj.Gin = fields.Gin
                 obj['Lot Number'] = fields['Lot Number']
                 obj['Mean Staple'] = fields['Mean Staple']
                 obj.Quantity = fields.Quantity
-                obj.Test = fields.Tested ? `<button class='test' onclick='location.href="/Test.html?id=${fields['Lot Number']}"'>Test Report</button>` : ''
+                obj.Test = fields.Tested ?
+                    `<button class='test' onclick='location.href="/Test?id=${fields['Lot Number']}"'>Test Report</button>` :
+                    ''
 
                 arr[i] = obj
                 obj = {}
@@ -131,8 +142,7 @@
             return arr
         }
 
-        window.addEventListener('load', (event) => {
-        })
+        window.addEventListener('load', (event) => {})
     </script>
 </body>
 
