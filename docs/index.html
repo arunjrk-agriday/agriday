@@ -1,23 +1,157 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="generator" content="GitLab Pages">
-    <title>Plain HTML site using GitLab Pages</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div class="navbar">
-      <a href="https://pages.gitlab.io/plain-html/">Plain HTML Example</a>
-      <a href="https://gitlab.com/pages/plain-html/">Repository</a>
-      <a href="https://gitlab.com/pages/">Other Examples</a>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lots</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+        integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.material.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: rgb(217, 236, 222);
+        }
+
+        #container {
+            width: 100vw;
+            height: auto;
+            padding: 16px;
+            display: grid;
+        }
+
+        #table-container {
+            width: 999px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+    </style>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.material.min.css">
+</head>
+
+<body>
+
+
+    <div id="container">
+        <div id="table-container">
+            <h2>Available Lots</h2>
+            <table id="table_id" class="display"> </table>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./airtable.browser.js"></script>
+    <script>
+        axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+        var Airtable = require('airtable');
+        var base = new Airtable({
+            apiKey: 'keyoaH2N6xDEdSbr0'
+        }).base('appCGaSP4sJYidnyr');
 
-    <h1>Hello World!</h1>
 
-    <p>
-      This is a simple plain-HTML website on GitLab Pages, without any fancy static site generator.
-    </p>
-  </body>
+        var td = [{
+                record: 1
+            },
+            {
+                record: 2
+            },
+            {
+                record: 3
+            },
+            {
+                record: 4
+            }
+        ];
+        // base('Lots').select({
+        //     // Selecting the first 3 records in Grid view:
+        //     maxRecords: 3,
+        //     view: "Grid view"
+        // }).eachPage(function page(records, fetchNextPage) {
+        //     // This function (`page`) will get called for each page of records.
+
+        //     console.log("records: ", records)
+
+        //     records.forEach(function (record) {
+        //         console.log('Retrieved', record.get('Lot Number'));
+        //     });
+
+        //     // To fetch the next page of records, call `fetchNextPage`.
+        //     // If there are more records, `page` will get called again.
+        //     // If there are no more records, `done` will get called.
+        //     fetchNextPage();
+
+        // }, function done(err) {
+        //     if (err) {
+        //         console.error(err);
+        //         return;
+        //     }
+        // });
+
+        function createTable(data) {
+            let table = new DataTable('#table_id', {
+                data: data,
+
+                columns: [{
+                        data: "Lot Number", title: "Lot Number"},{
+                        data: "Gin", title: "Gin"},{
+                        data: "Quantity", title: "Quantity"},{
+                        data: "Mean Staple", title: "Mean Staple"},{
+                        data: "Test", title: "Test Report" }
+                ],
+                autoWidth: false,
+                columnDefs: [{
+                    targets: ['_all'],
+                    className: 'mdc-data-table__cell'
+                }]
+            });
+        }
+
+
+        (async () => {
+            var res = await axios({
+                url: 'https://api.airtable.com/v0/appCGaSP4sJYidnyr/Lots?maxRecords=100&view=Grid%20view',
+                method: 'get',
+                headers: {
+                    'Authorization': 'Bearer keyOVePUwmAs4z1uN'
+                }
+            })
+            console.log(res)
+            console.log(processData(res))
+            createTable(processData(res))
+        })()
+
+
+        function processData(data) {
+            let arr = [];
+            let obj = {};
+            let fields = {}
+            let records = data.data.records
+    
+            for (var i = 0; i < records.length; i++) {
+                
+                fields = records[i].fields
+
+                obj.Gin = fields.Gin
+                obj['Lot Number'] = fields['Lot Number']
+                obj['Mean Staple'] = fields['Mean Staple']
+                obj.Quantity = fields.Quantity
+                obj.Test = fields.Tested ? `<button class='test' onclick='location.href="/public/Test.html?id=${fields['Lot Number']}"'>Test Report</button>` : ''
+
+                arr[i] = obj
+                obj = {}
+
+            }
+            return arr
+        }
+
+        window.addEventListener('load', (event) => {
+        })
+    </script>
+</body>
+
 </html>
-
