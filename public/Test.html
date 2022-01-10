@@ -10,25 +10,7 @@
         integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
     <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.material.min.js"></script>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: rgb(217, 236, 222);
-        }
-
-        #container {
-            width: 100vw;
-            height: auto;
-            padding: 16px;
-            display: grid;
-        }
-
-        #table-container {
-            width: 999px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
@@ -40,7 +22,7 @@
 
     <div id="container">
         <div id="table-container">
-            <h2>Available Lots</h2>
+            <h2>Test Data</h2>
             <table id="table_id" class="display"> </table>
         </div>
     </div>
@@ -52,7 +34,8 @@
         var base = new Airtable({
             apiKey: 'keyoaH2N6xDEdSbr0'
         }).base('appCGaSP4sJYidnyr');
-
+        
+        const urlParams = new URLSearchParams(window.location.search)
 
         var td = [{
                 record: 1
@@ -97,11 +80,16 @@
                 data: data,
 
                 columns: [{
-                        data: "Lot Number", title: "Lot Number"},{
-                        data: "Gin", title: "Gin"},{
-                        data: "Quantity", title: "Quantity"},{
-                        data: "Mean Staple", title: "Mean Staple"},{
-                        data: "Test", title: "Test Report" }
+                        data: "Station", title: "Station"},{
+                        data: "Variety", title: "Variety"},{
+                        data: "UHML (mm)", title: "UHML (mm)"},{
+                        data: "UI (%)", title: "UI (%)"},{
+                        data: "Strength", title: "Strength at 3.2mm (g/t)"},{
+                        data: "Elong (%)", title: "Elong (%)"},{
+                        data: "Color Rd", title: "Color Rd"},{
+                        data: "Color +b", title: "Color +b"},{
+                        data: "Color CG", title: "Color CG"},{
+                        data: "Trash %", title: "Trash %"}
                 ],
                 autoWidth: false,
                 columnDefs: [{
@@ -114,7 +102,7 @@
 
         (async () => {
             var res = await axios({
-                url: 'https://api.airtable.com/v0/appCGaSP4sJYidnyr/Lots?maxRecords=100&view=Grid%20view',
+                url: `https://api.airtable.com/v0/appCGaSP4sJYidnyr/Test?filterByFormula=%7BLot+ID%7D%3D%22${urlParams.get('id')}%22&maxRecords=100&sort%5B0%5D%5Bfield%5D=UHML+(mm)&sort%5B0%5D%5Bdirection%5D=desc`,
                 method: 'get',
                 headers: {
                     'Authorization': 'Bearer keyoaH2N6xDEdSbr0'
@@ -136,12 +124,21 @@
                 
                 fields = records[i].fields
 
-                obj.Gin = fields.Gin
-                obj['Lot Number'] = fields['Lot Number']
-                obj['Mean Staple'] = fields['Mean Staple']
-                obj.Quantity = fields.Quantity
-                obj.Test = fields.Tested ? `<button class='test' onclick='location.href="/public/Test.html?id=${fields['Lot Number']}"'>Test Report</button>` : ''
+                obj['UHML (mm)'] = fields['UHML (mm)']
+                obj['UI (%)'] = fields['UI (%)']
+                obj['Strength'] = fields['Strength at 3.2mm (g/t)']
+                obj['Elong (%)'] = fields['Elong (%)']
+                obj['MIC'] = fields['MIC']
+                obj['Color Rd'] = fields['Color Rd']
+                obj['Color +b'] = fields['Color +b']
+                obj['Color CG'] = fields['Color CG']
+                obj['SFI'] = fields['SFI']
+                obj['Trash %'] = fields['Trash %']
+                obj['Station'] = fields['Station']
+                obj['Variety'] = fields['Variety']
+                // obj.Test = fields.Tested ? `<button class='test' onclick='location.href="/Test.html?id=${fields.id}"'>Test Report</button>` : ''
 
+                console.log(fields['Strength at 3.2mm (g/t)'])
                 arr[i] = obj
                 obj = {}
 

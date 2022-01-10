@@ -22,3 +22,22 @@ body {
   color: #ffffff;
 }
 
+
+
+body {
+  font-family: sans-serif;
+  background-color: rgb(0, 194, 52);
+}
+
+#container {
+  width: 100vw;
+  height: auto;
+  padding: 16px;
+  display: grid;
+}
+
+#table-container {
+  width: 999px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
